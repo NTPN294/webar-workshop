@@ -222,8 +222,10 @@
         <a-text
           id="stap4-tekst"
           value="-"
-          position="0 0.51 0"
+          position="0 1.01 0"
+          rotation="-90 0 0"
           align="center"
+          width="4"
           color="#000000"
           scale="0.8 0.8 0.8"
           side="double"
@@ -239,6 +241,34 @@
 
     <!-- [OPDRACHT 2] Script: knoppen veranderen de kleur -->
     <script>
+
+    // ============================================================
+    // [OPDRACHT 6] Een bericht sturen naar de Raspberry Pi
+    // ============================================================
+    const TOPIC_LED = localStorage.getItem("mqtt_topic_led") || ("workshop/" + GROEPS_ID + "/led");
+
+    function stuurNaarPi(kleurAlsRGB) {
+      if (!isVerbonden()) {             // alleen versturen als we verbonden zijn
+        alert("Geen MQTT-verbinding! Controleer de broker-URL via 'MQTT Instellingen'.");
+        return;
+      }
+      const bericht = new Paho.MQTT.Message(kleurAlsRGB);  // het bericht zelf, bijv. "0,255,0"
+      bericht.destinationName = TOPIC_LED;                // op welk topic het moet
+      client.send(bericht);
+      console.log("Verzonden naar " + TOPIC_LED + ": " + kleurAlsRGB);
+    }
+
+    // --- Voeg stuurNaarPi toe aan je bestaande knoppen uit Opdracht 2: ---
+    btnGroen.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#00ff00");
+      stuurNaarPi("0,255,0");   // [OPDRACHT 6] ook naar de Pi sturen (groen)
+    });
+
+    btnRood.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#ff0000");
+      stuurNaarPi("255,0,0");   // [OPDRACHT 6] ook naar de Pi sturen (rood)
+    });
+
       // [OPDRACHT 4] het blok en de tekst op marker 4 ophalen
       const stap4Blok = document.getElementById("stap4-blok");
       const stap4Tekst = document.getElementById("stap4-tekst");
@@ -343,8 +373,30 @@
         console.log(
           "Nieuwe data op [" + message.destinationName + "]: " + payload,
         );
+            // [OPDRACHT 5] pas de kleur van het blok aan
+      pasKleurAan(payload);
       }
 
+          // ============================================================
+    // [OPDRACHT 5] De kleur van het blok volgt de waarde
+    // PAS HIERONDER JE EIGEN DREMPELS AAN!
+    // ============================================================
+    const GRENS_GROEN = 22;   // onder deze waarde: groen ("alles prima")
+    const GRENS_ROOD  = 27;   // boven deze waarde: rood ("alarm!") — ertussen: geel
+
+    function pasKleurAan(waardeAlsTekst) {
+      const waarde = parseFloat(waardeAlsTekst);  // tekst -> getal, zodat we kunnen vergelijken
+      if (isNaN(waarde)) {                        // geen getal? dan niks doen
+        return;
+      }
+      if (waarde < GRENS_GROEN) {
+        stap4Blok.setAttribute("color", "#00ff00");   // groen
+      } else if (waarde > GRENS_ROOD) {
+        stap4Blok.setAttribute("color", "#ff0000");   // rood
+      } else {
+        stap4Blok.setAttribute("color", "#ffff00");   // geel
+      }
+    }
       const publishInput = document.getElementById("publish-input");
       document
         .getElementById("publish-btn")
