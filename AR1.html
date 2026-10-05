@@ -241,34 +241,6 @@
 
     <!-- [OPDRACHT 2] Script: knoppen veranderen de kleur -->
     <script>
-
-    // ============================================================
-    // [OPDRACHT 6] Een bericht sturen naar de Raspberry Pi
-    // ============================================================
-    const TOPIC_LED = localStorage.getItem("mqtt_topic_led") || ("workshop/" + GROEPS_ID + "/led");
-
-    function stuurNaarPi(kleurAlsRGB) {
-      if (!isVerbonden()) {             // alleen versturen als we verbonden zijn
-        alert("Geen MQTT-verbinding! Controleer de broker-URL via 'MQTT Instellingen'.");
-        return;
-      }
-      const bericht = new Paho.MQTT.Message(kleurAlsRGB);  // het bericht zelf, bijv. "0,255,0"
-      bericht.destinationName = TOPIC_LED;                // op welk topic het moet
-      client.send(bericht);
-      console.log("Verzonden naar " + TOPIC_LED + ": " + kleurAlsRGB);
-    }
-
-    // --- Voeg stuurNaarPi toe aan je bestaande knoppen uit Opdracht 2: ---
-    btnGroen.addEventListener("click", function() {
-      stap2Kubus.setAttribute("color", "#00ff00");
-      stuurNaarPi("0,255,0");   // [OPDRACHT 6] ook naar de Pi sturen (groen)
-    });
-
-    btnRood.addEventListener("click", function() {
-      stap2Kubus.setAttribute("color", "#ff0000");
-      stuurNaarPi("255,0,0");   // [OPDRACHT 6] ook naar de Pi sturen (rood)
-    });
-
       // [OPDRACHT 4] het blok en de tekst op marker 4 ophalen
       const stap4Blok = document.getElementById("stap4-blok");
       const stap4Tekst = document.getElementById("stap4-tekst");
