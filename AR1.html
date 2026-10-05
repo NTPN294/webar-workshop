@@ -16,6 +16,20 @@
   <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
   <script src="https://raw.githack.com/jeromeetienne/AR.js/2.1.4/aframe/build/aframe-ar.js"></script>
   <script src="js/mqttws31.min.js"></script>
+  <!-- [OPDRACHT 2] Script: knoppen veranderen de kleur -->
+  <script>
+    const stap2Kubus = document.getElementById("stap2-kubus");
+    const btnGroen   = document.getElementById("btn-groen");
+    const btnRood    = document.getElementById("btn-rood");
+
+    btnGroen.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#00ff00");
+    });
+
+    btnRood.addEventListener("click", function() {
+      stap2Kubus.setAttribute("color", "#ff0000");
+    });
+  </script>
 
   <!-- ================================================================= -->
   <!-- STYLING: hoe 2D onderdelen op het scherm eruitzien.                -->
@@ -54,23 +68,6 @@
     #btn-rood  { background: #cc0000; }
   </style>
 </head>
-
-  <!-- [OPDRACHT 2] Script: knoppen veranderen de kleur -->
-  <script>
-    // Haal de knoppen en het 3D-object op via hun id (hun 'huisnummer')
-    const stap2Kubus = document.getElementById("stap2-kubus");
-    const btnGroen   = document.getElementById("btn-groen");
-    const btnRood    = document.getElementById("btn-rood");
-
-    // ALS op de GROEN-knop wordt geklikt, DAN... (de kleur veranderen)
-    btnGroen.addEventListener("click", function() {
-      stap2Kubus.setAttribute("color", "#00ff00");
-    });
-
-    btnRood.addEventListener("click", function() {
-      stap2Kubus.setAttribute("color", "#ff0000");
-    });
-  </script>
 
 <body>
 
@@ -131,6 +128,5 @@
   <!-- nog geen script nodig: de kubus hierboven staat volledig in de     -->
   <!-- HTML.                                                             -->
   <!-- ================================================================= -->
-
 </body>
 </html>
